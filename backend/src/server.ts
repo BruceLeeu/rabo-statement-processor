@@ -1,12 +1,15 @@
-import http from "http";
+import express from "express";
 
-const hostname = "localhost";
-const port = 8080;
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
-  res.end("Hello, world! 🌍");
+const app = express();
+const port = "3000";
+
+app.get("/validate/:fileType", (req, res) => {
+  res.status(200).send({
+    result: "Hello World",
+    fileType: req.params.fileType,
+  });
 });
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
 });
