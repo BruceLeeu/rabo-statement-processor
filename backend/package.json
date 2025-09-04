@@ -2,23 +2,32 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx tsc --noEmit && npx tsx --watch src/server.ts"
+  },
+  "imports": {
+    "#*": "./src/*"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^9.34.0",
     "@tsconfig/node22": "^22.0.2",
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.0",
+    "eslint": "^9.34.0",
+    "eslint-plugin-perfectionist": "^4.15.0",
+    "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.42.0"
   },
   "dependencies": {
+    "csv": "^6.4.1",
     "express": "^5.1.0"
   }
 }
