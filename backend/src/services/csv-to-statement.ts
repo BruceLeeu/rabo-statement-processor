@@ -1,12 +1,12 @@
-import { Statement } from "#models/statement.js";
+import { isStatement, Statement } from "#models/statement.js";
 import { parse } from "csv-parse";
 import fs from "node:fs";
 
-export const processFile = () => {
+export const processCsvFile = () => {
   const columnNames: Record<keyof Statement, string> = {
+    accountNumber: "Account Number",
     description: "Description",
     endBalance: "End Balance",
-    IBAN: "Account Number",
     mutation: "Mutation",
     reference: "Reference",
     startBalance: "Start Balance",
@@ -25,22 +25,18 @@ export const processFile = () => {
               return key;
             }
           }
-          throw new Error(`Typing for column '${column}' not found`);
           //throw error because no column found (incomplete typing)
-          return;
+          throw new Error(`Mapping for column '${column}' not found`);
         }),
     })
-      .on("data", (row: Statement) => {
-        console.log(row);
-        if (typeof row.reference !== "number") {
-          // throw error, add to failed transactions
-          console.log(`Statement validation failed because "reference" was not typed correctly: ${JSON.stringify(row, null, 2)}`);
+      .on("data", (row: unknown) => {
+        if (!isStatement(row)) {
+          // TODO: handle error
+          console.error(row);
           return;
         }
-        if (typeof row.startBalance !== "number") return;
-        if (typeof row.mutation !== "number") return;
-        if (typeof row.endBalance !== "number") return;
         records.push(row); // Handle `data` event
+        console.log(row);
       })
       .on("end", () => {
         console.log(`CSV file successfully processed. ${records.length.toString()} records added.`);
