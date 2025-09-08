@@ -4,33 +4,45 @@ import fs from "node:fs";
 
 export const processXmlFile = () => {
   const records: Statement[] = [];
-  fs.createReadStream(`src/assets/records.xml`, "utf8")
-    .on("data", (chunk) => {
-      const parser = new XMLParser({
-        attributeNamePrefix: "",
-        ignoreAttributes: false,
-        parseAttributeValue: true,
-      });
+  return new Promise<Statement[]>((resolve, reject) => {
+    fs.createReadStream(`src/assets/records.xml`, "utf8")
+      .on("data", (chunk) => {
+        const parser = new XMLParser({
+          attributeNamePrefix: "",
+          ignoreAttributes: false,
+          parseAttributeValue: true,
+        });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const obj = parser.parse(chunk);
+        const obj: unknown = parser.parse(chunk);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      for (const record of obj.records.record) {
-        if (!isStatement(record)) {
-          // Throw error
-          console.error(record);
-          continue;
+        if (
+          !obj ||
+          typeof obj !== "object" ||
+          !("records" in obj) ||
+          !obj.records ||
+          typeof obj.records !== "object" ||
+          !("record" in obj.records) ||
+          !Array.isArray(obj.records.record)
+        ) {
+          throw new Error(`Parsed XML object is not structured correctly to contain an array in 'records.record'`);
         }
-        records.push(record);
-        console.log(record);
-      }
-    })
-    .on("end", () => {
-      console.log(`XML file successfully processed. ${records.length.toString()} records added.`);
-    })
-    .on("error", (error: Error) => {
-      console.error("An error occurred:", error.message); // Handle `error` event
-    });
-  return records;
+
+        for (const record of obj.records.record) {
+          if (!isStatement(record)) {
+            // TODO: handle error?
+            console.error("The following record is not of type Statement:", record);
+            continue;
+          }
+          records.push(record);
+        }
+      })
+      .on("end", () => {
+        console.info(`XML file successfully processed. ${records.length.toString()} records extracted.`);
+        resolve(records);
+      })
+      .on("error", (error: Error) => {
+        console.error("An error occurred:", error.message);
+        reject(error);
+      });
+  });
 };

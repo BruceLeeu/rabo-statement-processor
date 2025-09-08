@@ -13,37 +13,37 @@ export const processCsvFile = () => {
   };
 
   const records: Statement[] = [];
-  fs.createReadStream(`src/assets/records.csv`).pipe(
-    parse({
-      // CSV options if any
-      cast: true,
-      columns: (header) =>
-        header.map((column) => {
-          let key: keyof Statement;
-          for (key in columnNames) {
-            if (columnNames[key] === column) {
-              return key;
+  return new Promise<Statement[]>((resolve, reject) => {
+    fs.createReadStream(`src/assets/records.csv`).pipe(
+      parse({
+        cast: true,
+        columns: (header) =>
+          header.map((column) => {
+            let key: keyof Statement;
+            for (key in columnNames) {
+              if (columnNames[key] === column) {
+                return key;
+              }
             }
+            throw new Error(`Mapping for column '${column}' not found`);
+          }),
+      })
+        .on("data", (record: unknown) => {
+          if (!isStatement(record)) {
+            // TODO: handle error?
+            console.error("The following record is not of type Statement:", record);
+            return;
           }
-          //throw error because no column found (incomplete typing)
-          throw new Error(`Mapping for column '${column}' not found`);
+          records.push(record);
+        })
+        .on("end", () => {
+          console.info(`CSV file successfully processed. ${records.length.toString()} records extracted.`);
+          resolve(records);
+        })
+        .on("error", (error: Error) => {
+          console.error("An error occurred:", error.message);
+          reject(error);
         }),
-    })
-      .on("data", (row: unknown) => {
-        if (!isStatement(row)) {
-          // TODO: handle error
-          console.error(row);
-          return;
-        }
-        records.push(row); // Handle `data` event
-        console.log(row);
-      })
-      .on("end", () => {
-        console.log(`CSV file successfully processed. ${records.length.toString()} records added.`);
-      })
-      .on("error", (error: Error) => {
-        console.error("An error occurred:", error.message); // Handle `error` event
-      }),
-  );
-  return records;
+    );
+  });
 };
