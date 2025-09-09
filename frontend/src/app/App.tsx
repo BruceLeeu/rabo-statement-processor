@@ -1,10 +1,11 @@
 import './App.css'
+import Report from './routes/Report'
 
 function App() {
 
   return (
     <>
-      Hello world!
+      <Report/>
     </>
   )
 }
