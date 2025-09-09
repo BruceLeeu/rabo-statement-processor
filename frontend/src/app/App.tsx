@@ -1,13 +1,12 @@
-import './App.css'
-import Report from './routes/Report'
+import "./App.scss";
+import Report from "./routes/Report";
 
 function App() {
-
   return (
     <>
-      <Report/>
+      <Report />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

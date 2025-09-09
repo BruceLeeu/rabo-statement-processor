@@ -1,0 +1,14 @@
+button {
+  padding: 0.5rem;
+  background-color: var(--primary);
+  border-radius: 5rem;
+  border: 1px solid var(--secondary);
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: inset 0px 0px 0px 0.125rem var(--secondary);
+  }
+  &:active {
+    background-color: #f4cea3;
+  }
+}

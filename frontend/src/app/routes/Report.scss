@@ -1,0 +1,68 @@
+.titleBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 8rem;
+
+  .titleFloater {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0.5rem;
+    height: 6rem;
+
+    border: 1px solid darkgray;
+    padding: 1rem;
+    border-radius: 5rem;
+    background-color: #ffffffc7;
+    background-image: radial-gradient(circle at 50% 250%, darkgray, transparent);
+    backdrop-filter: blur(0.125rem);
+  }
+
+  img {
+    width: auto;
+    height: 5rem;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  background: none;
+  filter: drop-shadow(0 0 0.5rem lightgray);
+
+  td,
+  th {
+    padding: 1rem;
+  }
+  thead {
+    th {
+      background-color: var(--primary);
+      color: white;
+      text-align: left;
+
+      &:first-of-type {
+        border-top-left-radius: 1rem;
+      }
+      &:last-of-type {
+        border-top-right-radius: 1rem;
+      }
+    }
+  }
+  tbody {
+    tr {
+      border-bottom: 1px solid #ddd;
+
+      &:nth-of-type(even) {
+        background-color: #eee;
+      }
+      &:nth-of-type(odd) {
+        background-color: white;
+      }
+      &:last-of-type {
+        border-bottom: 2px solid var(--secondary);
+      }
+    }
+  }
+}
