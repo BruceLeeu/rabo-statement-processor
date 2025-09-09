@@ -16,6 +16,7 @@ export const processCsvFile = () => {
   return new Promise<Statement[]>((resolve, reject) => {
     fs.createReadStream(`src/assets/records.csv`).pipe(
       parse({
+        autoParse: true,
         cast: true,
         columns: (header) =>
           header.map((column) => {
@@ -27,6 +28,7 @@ export const processCsvFile = () => {
             }
             throw new Error(`Mapping for column '${column}' not found`);
           }),
+        encoding: "utf8",
       })
         .on("data", (record: unknown) => {
           if (!isStatement(record)) {

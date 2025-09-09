@@ -74,6 +74,7 @@ const Report = () => {
               <thead>
                 <tr>
                   <th>Reference</th>
+                  <th>Transaction description</th>
                   <th>Fail reason: </th>
                 </tr>
               </thead>
@@ -83,6 +84,7 @@ const Report = () => {
                   return (
                     <tr>
                       <td>{statement.reference}</td>
+                      <td>{statement.description}</td>
                       <td>Transaction reference was not unique</td>
                     </tr>
                   );
@@ -94,6 +96,7 @@ const Report = () => {
                   return (
                     <tr>
                       <td>{statement.reference}</td>
+                      <td>{statement.description}</td>
                       <td>
                         End balance incorrect. Posted endBalance: €{statement.endBalance}. Calculated endBalance: €{calculatedEndBalance}. Difference:
                         €{difference}
