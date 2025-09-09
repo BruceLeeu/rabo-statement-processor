@@ -1,4 +1,4 @@
-import { isStatement, Statement } from "#models/statement.js";
+import { isStatement, Statement } from "#types/statement.js";
 import { parse } from "csv-parse";
 import fs from "node:fs";
 

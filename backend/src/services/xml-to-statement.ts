@@ -1,4 +1,4 @@
-import { isStatement, Statement } from "#models/statement.js";
+import { isStatement, Statement } from "#types/statement.js";
 import { XMLParser } from "fast-xml-parser";
 import fs from "node:fs";
 

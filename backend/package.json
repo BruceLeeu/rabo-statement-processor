@@ -16,6 +16,7 @@
   "devDependencies": {
     "@eslint/js": "^9.34.0",
     "@tsconfig/node22": "^22.0.2",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.0",
     "eslint": "^9.34.0",
@@ -27,6 +28,7 @@
     "typescript-eslint": "^8.42.0"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "csv": "^6.4.1",
     "express": "^5.1.0",
     "fast-xml-parser": "^5.2.5"

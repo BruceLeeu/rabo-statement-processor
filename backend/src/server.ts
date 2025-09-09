@@ -1,10 +1,14 @@
 import { processCsvFile } from "#services/csv-to-statement.js";
 import { validateStatements } from "#services/statement-processor.js";
 import { processXmlFile } from "#services/xml-to-statement.js";
+import cors from "cors";
 import express from "express";
 
 const app = express();
 const port = "3000";
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+app.use(cors({}));
 
 app.get("/validate/:fileType", async (req, res) => {
   if (req.params.fileType === "xml") {
@@ -27,5 +31,5 @@ app.get("/validate/:fileType", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.info(`App listening on port ${port}`);
+  console.info(`App listening on port ${port} with CORS allowed for all origins`);
 });

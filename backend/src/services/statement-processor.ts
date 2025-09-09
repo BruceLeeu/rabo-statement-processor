@@ -1,4 +1,4 @@
-import { Statement } from "#models/statement.js";
+import { Statement } from "#types/statement.js";
 
 export const validateStatements = (statements: Statement[]) => {
   console.log("running", statements);
