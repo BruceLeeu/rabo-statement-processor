@@ -49,11 +49,27 @@ const Report = () => {
         {data && (
           <>
             <h3>Report:</h3>
-            <h4>Valid</h4>
-            <span>Amount of valid extracted records: {data?.valid.length}</span>
-            <br />
-            <h4>Failed</h4>
-            <span>Amount of invalid failed records: {(data?.incorrectBalance?.length ?? 0) + (data?.duplicate?.length ?? 0)}</span>
+            <div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Statement summary</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Successfully processed transactions</td>
+                    <td>{data?.valid.length}</td>
+                  </tr>
+                  <tr>
+                    <td>Failed transactions</td>
+                    <td>{(data?.incorrectBalance?.length ?? 0) + (data?.duplicate?.length ?? 0)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h4>Detail</h4>
             <table>
               <thead>
                 <tr>
