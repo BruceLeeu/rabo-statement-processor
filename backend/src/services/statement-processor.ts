@@ -21,6 +21,7 @@ export const validateStatements = (statements: Statement[]): Report => {
     const verifiedEndBalance = Math.round((statement.startBalance + statement.mutation) * 100) / 100;
     if (statement.endBalance !== verifiedEndBalance) {
       incorrectBalanceStatements.push(statement);
+      continue;
     }
 
     validStatements.set(statement.reference, statement);
@@ -30,7 +31,7 @@ export const validateStatements = (statements: Statement[]): Report => {
   for (const duplicate of Array.from(distinctDuplicateReferencesToRemove.keys())) {
     const firstDuplicate = validStatements.get(duplicate);
     if (firstDuplicate) {
-      duplicateStatements.push(firstDuplicate);
+      duplicateStatements.unshift(firstDuplicate);
       validStatements.delete(duplicate);
     }
   }

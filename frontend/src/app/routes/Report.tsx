@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Button from "../components/Button/Button";
-import "./Report.scss";
 import type { Statement, ValidateResponse } from "../generated-sources/openapi";
 import { validateStatements } from "../api/data-fetchers";
 import Table from "../components/Table/Table";

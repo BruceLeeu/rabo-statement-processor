@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "start": "npx tsc --noEmit && npx tsx --env-file .env --watch src/server.ts ",
     "openapi": "openapi-generator-cli generate -i src/openapi.yaml -g typescript-node -o generated-sources/openapi"
   },
@@ -26,7 +26,8 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.42.0"
+    "typescript-eslint": "^8.42.0",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@openapitools/openapi-generator-cli": "^2.23.1",

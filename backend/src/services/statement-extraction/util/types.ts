@@ -1,6 +1,6 @@
 interface NestedRecordArray {
   records: {
-    record: [];
+    record: unknown[];
   };
 }
 

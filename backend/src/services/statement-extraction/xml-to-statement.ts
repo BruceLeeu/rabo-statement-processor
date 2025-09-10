@@ -6,15 +6,15 @@ import { hasNestedRecordArray } from "./util/types.js";
 
 export const processXmlFile = (url: string) => {
   const records: Statement[] = [];
+  const parser = new XMLParser({
+    attributeNamePrefix: "",
+    ignoreAttributes: false,
+    parseAttributeValue: true,
+  });
+
   return new Promise<Statement[]>((resolve, reject) => {
     fs.createReadStream(url, { encoding: "utf8" })
       .on("data", (chunk) => {
-        const parser = new XMLParser({
-          attributeNamePrefix: "",
-          ignoreAttributes: false,
-          parseAttributeValue: true,
-        });
-
         const obj: unknown = parser.parse(chunk);
 
         if (!hasNestedRecordArray(obj)) {
