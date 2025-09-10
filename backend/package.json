@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx tsc --noEmit && npx tsx --watch src/server.ts"
+    "start": "npx tsc --noEmit && npx tsx --watch src/server.ts",
+    "openapi": "openapi-generator-cli generate -i src/openapi.yaml -g typescript-node -o generated-sources/openapi"
   },
   "imports": {
     "#*": "./src/*"
@@ -28,6 +29,7 @@
     "typescript-eslint": "^8.42.0"
   },
   "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.23.1",
     "cors": "^2.8.5",
     "csv": "^6.4.1",
     "express": "^5.1.0",

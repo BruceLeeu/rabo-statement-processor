@@ -4,12 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "openapi": "openapi-generator-cli generate -i ../backend/src/openapi.yaml -g typescript-fetch -o src/app/generated-sources/openapi"
   },
   "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.23.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },

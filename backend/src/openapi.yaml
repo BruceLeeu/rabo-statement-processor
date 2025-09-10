@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: Rabo Statement Processor API
+  version: 1.0.0
+  description: API for processing Rabobank statements.
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+paths:
+  /validate/{fileType}:
+    get:
+      summary: Validate a Rabobank statement file
+      parameters:
+        - name: fileType
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Statement processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statement'
+        '400':
+          description: Invalid file or request
+components:
+  schemas:
+    Statement:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+          example: "NL91ABNA0417164300"
+        description:
+          type: string
+        endBalance:
+          type: number
+        mutation:
+          type: number
+        reference:
+          type: number
+        startBalance:
+          type: number
+      required:
+        - accountNumber
+        - description
+        - endBalance
+        - mutation
+        - reference
+        - startBalance
+security:
+  - ApiKeyAuth: []

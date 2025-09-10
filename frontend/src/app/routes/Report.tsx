@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Button from "../components/Button";
-import type { Statement } from "../types/statement";
 import RabobankLogo from "../../assets/rabobank.png";
 import "./Report.scss";
+import type { Statement } from "../generated-sources/openapi";
 
 const Report = () => {
   const [data, setData] = useState<null | {
