@@ -20,7 +20,6 @@ export const validateStatements = (statements: Statement[]): Report => {
     // Round to two decimal places, because calculation does not have infinite precision
     const verifiedEndBalance = Math.round((statement.startBalance + statement.mutation) * 100) / 100;
     if (statement.endBalance !== verifiedEndBalance) {
-      console.info(`endBalance: ${statement.endBalance.toString()} does not match calculated endBalance: ${verifiedEndBalance.toString()}`);
       incorrectBalanceStatements.push(statement);
     }
 

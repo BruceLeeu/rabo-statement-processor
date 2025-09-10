@@ -6,6 +6,7 @@ This project utilizes Node.js with TypeScript + express and some ESLint rules.
 
 This project is built with Node version 22.19.0 - please use this version or newer!
 
+### In the `backend` subdirectory
 0. If you have `nvm` installed, then run `nvm use` to automatically use the correct Node version. Otherwise check that it is installed manually.
 1. `npm install`
 
