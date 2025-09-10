@@ -1,26 +1,33 @@
 import { useState } from "react";
-import Button from "../components/Button";
-import RabobankLogo from "../../assets/rabobank.png";
+import Button from "../components/Button/Button";
 import "./Report.scss";
-import type { ValidateResponse } from "../generated-sources/openapi";
+import type { Statement, ValidateResponse } from "../generated-sources/openapi";
 import { validateStatements } from "../api/data-fetchers";
+import Table from "../components/Table/Table";
+import TitleBar from "../components/TitleBar/TitleBar";
 
 const Report = () => {
   const [data, setData] = useState<null | ValidateResponse>(null);
+  const [successfulTransactions, setSuccessfulTransactions] = useState<number>(0);
+  const [failedTransactions, setFailedTransactions] = useState<number>(0);
 
   const generateReport = async (fileType: string) => {
     const result = await validateStatements(fileType);
     setData(result);
+    setSuccessfulTransactions(result?.valid.length ?? 0);
+    setFailedTransactions((result?.incorrectBalance?.length ?? 0) + (result?.duplicate?.length ?? 0));
+  };
+
+  const calculateStatementDifference = (statement: Statement) => {
+    // Round to two decimal places, because calculation does not have infinite precision
+    const calculatedEndBalance = Math.round((statement.startBalance + statement.mutation) * 100) / 100;
+    const difference = Math.round((statement.endBalance - calculatedEndBalance) * 100) / 100;
+    return { calculatedEndBalance, difference };
   };
 
   return (
     <>
-      <div className="titleBar">
-        <span className="titleFloater">
-          <img src={RabobankLogo} alt="Rabobank logo" />
-          <h1>Rabobank Statement Processor</h1>
-        </span>
-      </div>
+      <TitleBar title="Rabobank Statement Processor" withLogo />
       <h2>Validation actions</h2>
       <Button key="btn-validate-csv" title="Validate CSV" onClick={() => generateReport("csv")} />
       <Button key="btn-validate-xml" title="Validate XML" onClick={() => generateReport("xml")} />
@@ -30,62 +37,33 @@ const Report = () => {
           <>
             <h3>Report:</h3>
             <div>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Statement summary</th>
-                    <th>Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Successfully processed transactions</td>
-                    <td>{data?.valid.length}</td>
-                  </tr>
-                  <tr>
-                    <td>Failed transactions</td>
-                    <td>{(data?.incorrectBalance?.length ?? 0) + (data?.duplicate?.length ?? 0)}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <Table
+                headers={["Statement summary", "Total"]}
+                data={[
+                  ["Successfully processed transactions", successfulTransactions.toString()],
+                  ["Failed transactions", failedTransactions.toString()],
+                ]}
+              />
             </div>
             <h4>Detail</h4>
-            <table>
-              <thead>
-                <tr>
-                  <th>Reference</th>
-                  <th>Transaction description</th>
-                  <th>Fail reason: </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {data?.duplicate?.map((statement, index) => {
-                  return (
-                    <tr key={`duplicate-${index}`}>
-                      <td>{statement.reference}</td>
-                      <td>{statement.description}</td>
-                      <td>Transaction reference was not unique</td>
-                    </tr>
-                  );
-                })}
-                {data?.incorrectBalance?.map((statement, index) => {
-                  // Round to two decimal places, because calculation does not have infinite precision
-                  const calculatedEndBalance = Math.round((statement.startBalance + statement.mutation) * 100) / 100;
-                  const difference = Math.round((statement.endBalance - calculatedEndBalance) * 100) / 100;
-                  return (
-                    <tr key={`incorrectBalance-${index}`}>
-                      <td>{statement.reference}</td>
-                      <td>{statement.description}</td>
-                      <td>
-                        End balance incorrect. Posted endBalance: €{statement.endBalance}. Calculated endBalance: €{calculatedEndBalance}. Difference:
-                        €{difference}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <Table
+              headers={["Reference", "Transaction description", "Fail reason"]}
+              data={[
+                ...(data?.duplicate?.map((statement) => [
+                  statement.reference.toString(),
+                  statement.description,
+                  "Transaction reference was not unique",
+                ]) ?? []),
+                ...(data?.incorrectBalance?.map((statement) => {
+                  const { calculatedEndBalance, difference } = calculateStatementDifference(statement);
+                  return [
+                    statement.reference.toString(),
+                    statement.description,
+                    `End balance incorrect. Posted endBalance: €${statement.endBalance}. Calculated endBalance: €${calculatedEndBalance}. Difference: €${difference}`,
+                  ];
+                }) ?? []),
+              ]}
+            />
           </>
         )}
       </div>
