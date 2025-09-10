@@ -22,7 +22,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Statement'
+                $ref: '#/components/schemas/ValidateResponse'
         '400':
           description: Invalid file or request
 components:
@@ -50,5 +50,18 @@ components:
         - mutation
         - reference
         - startBalance
-security:
-  - ApiKeyAuth: []
+    StatementArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Statement'
+    ValidateResponse:
+      type: object
+      properties:
+        duplicate:
+            $ref: '#/components/schemas/StatementArray'
+        incorrectBalance:
+            $ref: '#/components/schemas/StatementArray'
+        valid:
+            $ref: '#/components/schemas/StatementArray'
+      required:
+        - valid

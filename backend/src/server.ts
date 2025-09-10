@@ -13,18 +13,12 @@ app.use(cors({}));
 app.get("/validate/:fileType", async (req, res) => {
   if (req.params.fileType === "xml") {
     const result = validateStatements(await processXmlFile());
-    res.status(200).send({
-      fileType: req.params.fileType,
-      result,
-    });
+    res.status(200).send(result);
     return;
   }
   if (req.params.fileType === "csv") {
     const result = validateStatements(await processCsvFile());
-    res.status(200).send({
-      fileType: req.params.fileType,
-      result,
-    });
+    res.status(200).send(result);
     return;
   }
   res.status(400).send(`Invalid file type '${req.params.fileType}'. Please use 'csv' or 'xml'`);

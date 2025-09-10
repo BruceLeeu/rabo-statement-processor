@@ -2,35 +2,15 @@ import { useState } from "react";
 import Button from "../components/Button";
 import RabobankLogo from "../../assets/rabobank.png";
 import "./Report.scss";
-import type { Statement } from "../generated-sources/openapi";
+import type { ValidateResponse } from "../generated-sources/openapi";
+import { validateStatements } from "../api/data-fetchers";
 
 const Report = () => {
-  const [data, setData] = useState<null | {
-    duplicate?: Statement[];
-    incorrectBalance?: Statement[];
-    valid: Statement[];
-  }>(null);
+  const [data, setData] = useState<null | ValidateResponse>(null);
 
-  const validateStatements = async (fileType: string) => {
-    try {
-      const response = await fetch(`http://localhost:3000/validate/${fileType}`);
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-
-      const result: {
-        fileType: string;
-        result: {
-          duplicate?: Statement[];
-          incorrectBalance?: Statement[];
-          valid: Statement[];
-        };
-      } = await response.json();
-      console.log(result);
-      setData(result.result);
-    } catch (error) {
-      console.error(error);
-    }
+  const generateReport = async (fileType: string) => {
+    const result = await validateStatements(fileType);
+    setData(result);
   };
 
   return (
@@ -42,8 +22,8 @@ const Report = () => {
         </span>
       </div>
       <h2>Validation actions</h2>
-      <Button key="btn-validate-csv" title="Validate CSV" onClick={() => validateStatements("csv")} />
-      <Button key="btn-validate-xml" title="Validate XML" onClick={() => validateStatements("xml")} />
+      <Button key="btn-validate-csv" title="Validate CSV" onClick={() => generateReport("csv")} />
+      <Button key="btn-validate-xml" title="Validate XML" onClick={() => generateReport("xml")} />
       <br />
       <div>
         {data && (
@@ -80,21 +60,21 @@ const Report = () => {
               </thead>
 
               <tbody>
-                {data?.duplicate?.map((statement) => {
+                {data?.duplicate?.map((statement, index) => {
                   return (
-                    <tr>
+                    <tr key={`duplicate-${index}`}>
                       <td>{statement.reference}</td>
                       <td>{statement.description}</td>
                       <td>Transaction reference was not unique</td>
                     </tr>
                   );
                 })}
-                {data?.incorrectBalance?.map((statement) => {
+                {data?.incorrectBalance?.map((statement, index) => {
                   // Round to two decimal places, because calculation does not have infinite precision
                   const calculatedEndBalance = Math.round((statement.startBalance + statement.mutation) * 100) / 100;
                   const difference = Math.round((statement.endBalance - calculatedEndBalance) * 100) / 100;
                   return (
-                    <tr>
+                    <tr key={`incorrectBalance-${index}`}>
                       <td>{statement.reference}</td>
                       <td>{statement.description}</td>
                       <td>
