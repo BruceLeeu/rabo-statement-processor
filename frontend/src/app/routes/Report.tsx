@@ -24,6 +24,23 @@ const Report = () => {
     return { calculatedEndBalance, difference };
   };
 
+  const duplicateRows = (duplicate: Statement[]) => {
+    return duplicate.map((statement) => [statement.reference.toString(), statement.description, "Transaction reference was not unique"]) ?? [];
+  };
+
+  const incorrectBalanceRows = (incorrectBalance: Statement[]) => {
+    return (
+      incorrectBalance.map((statement) => {
+        const { calculatedEndBalance, difference } = calculateStatementDifference(statement);
+        return [
+          statement.reference.toString(),
+          statement.description,
+          `End balance incorrect. Posted endBalance: €${statement.endBalance}. Calculated endBalance: €${calculatedEndBalance}. Difference: €${difference}`,
+        ];
+      }) ?? []
+    );
+  };
+
   return (
     <>
       <TitleBar title="Rabobank Statement Processor" withLogo />
@@ -44,21 +61,7 @@ const Report = () => {
           <h4>Detail</h4>
           <Table
             headers={["Reference", "Transaction description", "Fail reason"]}
-            data={[
-              ...(data?.duplicate.map((statement) => [
-                statement.reference.toString(),
-                statement.description,
-                "Transaction reference was not unique",
-              ]) ?? []),
-              ...(data?.incorrectBalance.map((statement) => {
-                const { calculatedEndBalance, difference } = calculateStatementDifference(statement);
-                return [
-                  statement.reference.toString(),
-                  statement.description,
-                  `End balance incorrect. Posted endBalance: €${statement.endBalance}. Calculated endBalance: €${calculatedEndBalance}. Difference: €${difference}`,
-                ];
-              }) ?? []),
-            ]}
+            data={[...duplicateRows(data?.duplicate ?? []), ...incorrectBalanceRows(data?.incorrectBalance ?? [])]}
           />
         </>
       )}
