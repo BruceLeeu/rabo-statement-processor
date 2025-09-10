@@ -65,3 +65,5 @@ components:
             $ref: '#/components/schemas/StatementArray'
       required:
         - valid
+        - incorrectBalance
+        - duplicate

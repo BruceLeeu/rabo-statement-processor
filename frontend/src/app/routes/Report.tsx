@@ -32,41 +32,37 @@ const Report = () => {
       <Button key="btn-validate-csv" title="Validate CSV" onClick={() => generateReport("csv")} />
       <Button key="btn-validate-xml" title="Validate XML" onClick={() => generateReport("xml")} />
       <br />
-      <div>
-        {data && (
-          <>
-            <h3>Report:</h3>
-            <div>
-              <Table
-                headers={["Statement summary", "Total"]}
-                data={[
-                  ["Successfully processed transactions", successfulTransactions.toString()],
-                  ["Failed transactions", failedTransactions.toString()],
-                ]}
-              />
-            </div>
-            <h4>Detail</h4>
-            <Table
-              headers={["Reference", "Transaction description", "Fail reason"]}
-              data={[
-                ...(data?.duplicate?.map((statement) => [
+      {data && (
+        <>
+          <h3>Report:</h3>
+          <Table
+            headers={["Statement summary", "Total"]}
+            data={[
+              ["Successfully processed transactions", successfulTransactions.toString()],
+              ["Failed transactions", failedTransactions.toString()],
+            ]}
+          />
+          <h4>Detail</h4>
+          <Table
+            headers={["Reference", "Transaction description", "Fail reason"]}
+            data={[
+              ...(data?.duplicate.map((statement) => [
+                statement.reference.toString(),
+                statement.description,
+                "Transaction reference was not unique",
+              ]) ?? []),
+              ...(data?.incorrectBalance.map((statement) => {
+                const { calculatedEndBalance, difference } = calculateStatementDifference(statement);
+                return [
                   statement.reference.toString(),
                   statement.description,
-                  "Transaction reference was not unique",
-                ]) ?? []),
-                ...(data?.incorrectBalance?.map((statement) => {
-                  const { calculatedEndBalance, difference } = calculateStatementDifference(statement);
-                  return [
-                    statement.reference.toString(),
-                    statement.description,
-                    `End balance incorrect. Posted endBalance: €${statement.endBalance}. Calculated endBalance: €${calculatedEndBalance}. Difference: €${difference}`,
-                  ];
-                }) ?? []),
-              ]}
-            />
-          </>
-        )}
-      </div>
+                  `End balance incorrect. Posted endBalance: €${statement.endBalance}. Calculated endBalance: €${calculatedEndBalance}. Difference: €${difference}`,
+                ];
+              }) ?? []),
+            ]}
+          />
+        </>
+      )}
     </>
   );
 };

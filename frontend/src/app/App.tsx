@@ -1,4 +1,3 @@
-import "./App.scss";
 import Report from "./routes/Report";
 
 function App() {

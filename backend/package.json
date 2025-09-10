@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx tsc --noEmit && npx tsx --watch src/server.ts",
+    "start": "npx tsc --noEmit && npx tsx --env-file .env --watch src/server.ts ",
     "openapi": "openapi-generator-cli generate -i src/openapi.yaml -g typescript-node -o generated-sources/openapi"
   },
   "imports": {

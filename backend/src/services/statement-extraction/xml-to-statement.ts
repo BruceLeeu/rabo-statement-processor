@@ -2,10 +2,12 @@ import { isStatement, Statement } from "#types/statement.js";
 import { XMLParser } from "fast-xml-parser";
 import fs from "node:fs";
 
-export const processXmlFile = () => {
+import { hasNestedRecordArray } from "./util/types.js";
+
+export const processXmlFile = (url: string) => {
   const records: Statement[] = [];
   return new Promise<Statement[]>((resolve, reject) => {
-    fs.createReadStream(`src/assets/records.xml`, "utf8")
+    fs.createReadStream(url, { encoding: "utf8" })
       .on("data", (chunk) => {
         const parser = new XMLParser({
           attributeNamePrefix: "",
@@ -15,21 +17,14 @@ export const processXmlFile = () => {
 
         const obj: unknown = parser.parse(chunk);
 
-        if (
-          !obj ||
-          typeof obj !== "object" ||
-          !("records" in obj) ||
-          !obj.records ||
-          typeof obj.records !== "object" ||
-          !("record" in obj.records) ||
-          !Array.isArray(obj.records.record)
-        ) {
-          throw new Error(`Parsed XML object is not structured correctly to contain an array in 'records.record'`);
+        if (!hasNestedRecordArray(obj)) {
+          throw new Error(
+            `Parsed XML object is not structured correctly to contain an array in 'records.record'. Cannot continue processing records.`,
+          );
         }
 
         for (const record of obj.records.record) {
           if (!isStatement(record)) {
-            // TODO: handle error?
             console.error("The following record is not of type Statement:", record);
             continue;
           }
