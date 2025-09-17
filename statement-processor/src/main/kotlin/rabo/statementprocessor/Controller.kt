@@ -13,8 +13,20 @@ class Controller {
     @Operation(summary = "Validate statements", description = "Perform validation of all statements that are extracted from the supported file")
     @GetMapping("/{fileType}")
     fun validateFile(@PathVariable("fileType") fileType: String): Array<Statement> {
-        val testStatement = Statement("NL12RABO12312312", fileType, 100f, 50f, 50f, 12345 )
-        ParseXML().parseXmlFile();
-        return arrayOf(testStatement)
+        val testStatement = Statement("NL12RABO12312312", fileType, 100f, 50f, 50f, 12345)
+
+        when (fileType) {
+            "csv" -> {
+                ParseCSV().parseCsvFile()
+                return arrayOf(testStatement)
+            }
+
+            "xml" -> {
+                ParseXML().parseXmlFile()
+                return arrayOf(testStatement)
+            }
+
+            else -> return arrayOf(testStatement)
+        }
     }
 }
