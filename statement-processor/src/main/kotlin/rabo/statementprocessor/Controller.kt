@@ -14,6 +14,7 @@ class Controller {
     @GetMapping("/{fileType}")
     fun validateFile(@PathVariable("fileType") fileType: String): Array<Statement> {
         val testStatement = Statement("NL12RABO12312312", fileType, 100f, 50f, 50f, 12345 )
+        ParseXML().parseXmlFile();
         return arrayOf(testStatement)
     }
 }
