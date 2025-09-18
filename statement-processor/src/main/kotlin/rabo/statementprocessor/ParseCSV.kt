@@ -7,24 +7,16 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema
 
 class ParseCSV {
 
-    fun parseCsvFile(path: String = "") {
-        println("parsing CSV")
-        val schema = CsvSchema.builder()
-            .addColumn("Reference")
-            .addColumn("Account Number")
-            .addColumn("Description")
-            .addColumn("Start Balance")
-            .addColumn("Mutation")
-            .addColumn("End Balance")
-            .setSkipFirstDataRow(true) // Skip headers
-            .build()
+    fun parseCsvFile(path: String = ""): List<Statement> {
         val fileContent = this::class.java.classLoader.getResource("records.csv").readText(Charsets.ISO_8859_1)
         val csvMapper = CsvMapper()
-        val it: MappingIterator<MutableMap<String?, String?>?> = csvMapper
-            .readerForMapOf(String::class.java)
-            .with(schema)
+        val autoSchema = csvMapper.schemaFor(Statement::class.java).withHeader()
+        val it: MappingIterator<Statement> = csvMapper
+            .readerFor(Statement::class.java)
+            .with(autoSchema)
             .readValues(fileContent)
-        val all = it.readAll()
-        println(all)
+        val statements = it.readAll()
+
+        return statements
     }
 }
