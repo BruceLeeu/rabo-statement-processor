@@ -22,8 +22,8 @@ class Controller {
             }
 
             "xml" -> {
-                ParseXML().parseXmlFile()
-                return listOf(testStatement)
+                val statements: List<Statement> = ParseXML().parseXmlFile()
+                return statements
             }
 
             else -> return listOf(testStatement)
