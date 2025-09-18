@@ -29,6 +29,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation ("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.1")
     implementation ("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.18.1")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    testImplementation("org.springframework.security:spring-security-test")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
