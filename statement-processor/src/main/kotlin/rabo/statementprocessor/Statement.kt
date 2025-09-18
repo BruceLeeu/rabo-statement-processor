@@ -19,3 +19,9 @@ class Statement(
 class WrappedStatement(
     @JacksonXmlProperty(localName="record") val record: List<Statement>
 )
+
+class StatementResponse(
+    val duplicate: List<Statement>,
+    val incorrectBalance: List<Statement>,
+    val valid: List<Statement>,
+)
