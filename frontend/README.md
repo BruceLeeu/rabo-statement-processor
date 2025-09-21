@@ -11,7 +11,16 @@ Note that this project also uses openapi-generator-cli which requires Java to be
 
 0. If you have `nvm` installed, then run `nvm use` to automatically use the correct Node version. Otherwise check that it is installed manually.
 1. `npm install`
-2. `npm run openapi` at least ONCE to generate the required openAPI client and types. Rerun every time the backend is updated.
+
+#### Using the Node.js API
+
+2. `npm run openapi-node` at least ONCE to generate the required openAPI client and types. Rerun every time the backend is updated.
+
+#### Using the Kotlin Spring API
+
+!! Ensure that the Kotlin Spring API is running and that the API spec is reachable on `http://localhost:3000/v3/api-docs`
+
+2. `npm run openapi-kotlin` at least ONCE to generate the required openAPI client and types. Rerun every time the backend is updated.
 
 ## Startup
 

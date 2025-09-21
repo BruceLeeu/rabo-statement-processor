@@ -1,6 +1,6 @@
 # Rabobank Statement Processor
 
-This application is a monorepo that consists of a Node.js backend (with Express and TypeScript) and a React frontend (with Sass and TypeScript)
+This application is a monorepo that consists of two backend APIs (1. Node.js Express, 2. Kotlin Spring) and a React frontend (with Sass and TypeScript)
 
 ## Running the application
 
@@ -8,6 +8,8 @@ Ensure your computer has the following dependencies installed:
 
 - Node (npm) >= 22.19.0 (you can possibly get away with lower versions)
 - Java >= 11
+- Kotlin >= 2.2.0
+- Gradle >= 9.0.0
 
 In each subfolder you will find an appropriate readme that details how to install and run all the individual parts together.
 
