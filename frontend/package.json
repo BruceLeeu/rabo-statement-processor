@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "openapi": "openapi-generator-cli generate -i ../backend/src/openapi.yaml -g typescript-fetch -o src/app/generated-sources/openapi",
+    "purge-generated-sources": "rm -rf src/app/generated-sources",
+    "openapi-node": "npm run purge-generated-sources && openapi-generator-cli generate -i ../backend/src/openapi.yaml -g typescript-fetch -o src/app/generated-sources/openapi",
+    "openapi-kotlin": "npm run purge-generated-sources && openapi-generator-cli generate -i http://localhost:3000/v3/api-docs -g typescript-fetch -o src/app/generated-sources/openapi",
     "test": "vitest"
   },
   "dependencies": {

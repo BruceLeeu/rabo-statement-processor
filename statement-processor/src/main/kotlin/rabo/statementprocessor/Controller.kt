@@ -19,7 +19,7 @@ class Controller {
 
     @Operation(summary = "Validate statements", description = "Perform validation of all statements that are extracted from the supported file")
     @GetMapping("/{fileType}")
-    fun validateFile(@PathVariable("fileType") fileType: String): StatementResponse {
+    fun validateFileTypeGet(@PathVariable("fileType") fileType: String): StatementResponse {
 
         when (fileType) {
             "csv" -> {

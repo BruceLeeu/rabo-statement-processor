@@ -9,6 +9,8 @@ servers:
 paths:
   /validate/{fileType}:
     get:
+      tags:
+      - Controller
       summary: Validate a Rabobank statement file
       parameters:
         - name: fileType

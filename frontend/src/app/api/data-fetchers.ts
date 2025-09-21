@@ -1,6 +1,6 @@
-import { DefaultApi } from "../generated-sources/openapi";
+import { ControllerApi } from "../generated-sources/openapi";
 
-const API = new DefaultApi();
+const API = new ControllerApi();
 
 export const validateStatements = async (fileType: string) => {
   return await API.validateFileTypeGet({ fileType });
