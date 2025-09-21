@@ -2,7 +2,7 @@ package rabo.statementprocessor
 
 import com.fasterxml.jackson.databind.MappingIterator
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
-import com.fasterxml.jackson.dataformat.csv.CsvSchema
+import rabo.statementprocessor.types.Statement
 
 
 class ParseCSV {

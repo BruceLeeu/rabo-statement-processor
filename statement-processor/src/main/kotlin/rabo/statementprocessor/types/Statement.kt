@@ -1,4 +1,4 @@
-package rabo.statementprocessor
+package rabo.statementprocessor.types
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder

@@ -15,7 +15,7 @@ class SecurityConfig {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeHttpRequests {
-                authorize("/validate/**", permitAll)
+                authorize("/**", permitAll)
             }
         }
         return http.build()

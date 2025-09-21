@@ -1,7 +1,8 @@
 package rabo.statementprocessor
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
+import rabo.statementprocessor.types.Statement
+import rabo.statementprocessor.types.WrappedStatement
 
 class ParseXML {
 

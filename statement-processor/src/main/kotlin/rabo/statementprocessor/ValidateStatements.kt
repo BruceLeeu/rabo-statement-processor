@@ -1,5 +1,8 @@
 package rabo.statementprocessor
 
+import rabo.statementprocessor.types.Statement
+import rabo.statementprocessor.types.StatementResponse
+
 fun validateStatements(statements: List<Statement>): StatementResponse {
 
     val distinctStatements = mutableMapOf<Long, Long>()

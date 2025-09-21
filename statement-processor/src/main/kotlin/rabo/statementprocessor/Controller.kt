@@ -1,10 +1,17 @@
 package rabo.statementprocessor
 
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
+import rabo.statementprocessor.exceptions.InvalidFileTypeException
+import rabo.statementprocessor.types.Statement
+import rabo.statementprocessor.types.StatementResponse
 
 @RestController
 @RequestMapping("/validate")
@@ -13,7 +20,6 @@ class Controller {
     @Operation(summary = "Validate statements", description = "Perform validation of all statements that are extracted from the supported file")
     @GetMapping("/{fileType}")
     fun validateFile(@PathVariable("fileType") fileType: String): StatementResponse {
-        val testStatement = Statement("NL12RABO12312312", fileType, 100f, 50f, 50f, 12345)
 
         when (fileType) {
             "csv" -> {
@@ -25,8 +31,9 @@ class Controller {
                 val statements: List<Statement> = ParseXML().parseXmlFile()
                 return validateStatements(statements)
             }
-
-            else -> return StatementResponse(emptyList(), emptyList(), emptyList())
+            else -> {
+                throw InvalidFileTypeException(fileType)
+            }
         }
     }
 }
