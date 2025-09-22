@@ -3,45 +3,32 @@ package rabo.statementprocessor
 import rabo.statementprocessor.types.Statement
 import rabo.statementprocessor.types.StatementResponse
 
+/**
+ * This function will validate a list of statements based on two criteria.
+ * 1. Are there any duplicate reference numbers?
+ * 2. Does the `endBalance` match the calculated `startBalance + mutation`?
+ *
+ * Statements that match either of these two criteria will be removed from the list and returned separately.
+ * All remaining (valid) statements are returned separately as well
+ *
+ * @property statements the list of statements to be validated
+ * @return an object containing the three lists of type `StatementResponse`
+ */
 fun validateStatements(statements: List<Statement>): StatementResponse {
+    // Ensures that the whole group of duplicates is removed
+    val duplicateStatements = statements.groupBy{ it.reference }.filterValues { it.size > 1 }.values.flatten()
+    val distinctStatements = statements - duplicateStatements
+    val correctBalanceStatements = distinctStatements.filter { isBalanceCorrect(it)}
+    val incorrectBalanceStatements = distinctStatements - correctBalanceStatements
 
-    val distinctStatements = mutableMapOf<Long, Long>()
-    val distinctDuplicateReferencesToRemove = mutableMapOf<Long, Long>()
-    val validStatements = mutableMapOf<Long, Statement>()
-    val duplicateStatements = mutableListOf<Statement>()
-    val incorrectBalanceStatements = mutableListOf<Statement>()
+    return StatementResponse(duplicateStatements, incorrectBalanceStatements, correctBalanceStatements)
+}
 
-    for (statement in statements) {
-        if (distinctStatements.containsKey(statement.reference)) {
-            duplicateStatements.add(statement)
-            distinctDuplicateReferencesToRemove.set(statement.reference, statement.reference)
-            continue
-        } else {
-            distinctStatements.set(statement.reference, statement.reference)
-        }
-
-        val verifiedEndBalance = Math.round((statement.startBalance + statement.mutation) * 100) / 100.00f;
-
-        if (statement.endBalance !== verifiedEndBalance) {
-            incorrectBalanceStatements.add(statement)
-            continue
-        }
-
-        validStatements.set(statement.reference, statement);
+private fun isBalanceCorrect(statement: Statement): Boolean {
+    // Round to two decimal places, because calculation does not have infinite precision
+    val verifiedEndBalance = Math.round((statement.startBalance + statement.mutation) * 100) / 100.00f;
+    if (statement.endBalance !== verifiedEndBalance) {
+        return false
     }
-
-    // Remove all first duplicates
-    for (duplicate in distinctDuplicateReferencesToRemove) {
-        val firstDuplicate = validStatements.get(duplicate.key)
-        if (firstDuplicate !== null){
-            duplicateStatements.addFirst(firstDuplicate)
-            validStatements.remove(duplicate.key)
-        }
-    }
-
-    println(duplicateStatements)
-    println(incorrectBalanceStatements)
-    println(validStatements)
-
-    return StatementResponse(duplicateStatements, incorrectBalanceStatements, validStatements.values.toList())
+    return true
 }
